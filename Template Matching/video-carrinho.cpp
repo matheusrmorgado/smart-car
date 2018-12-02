@@ -51,7 +51,7 @@ int main( int argc, char** argv )
 	//Create matrix
 	Mat_<COR> img(vi.get(CV_CAP_PROP_FRAME_HEIGHT ), vi.get(CV_CAP_PROP_FRAME_WIDTH ));
 	Mat_<FLT> quadrado; 
-	le( quadrado, "quadradoTop.png" );
+	le( quadrado, "quadrado-novo.png" );
 	
 	//Creating the output file
 	int ex = static_cast<int>(vi.get(CV_CAP_PROP_FOURCC));
