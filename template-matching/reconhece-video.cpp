@@ -38,36 +38,49 @@ void printSQR( Mat_<COR>& img, Mat_<FLT> quadrado){
 	
 int main( int argc, char** argv )
 {
-	//begin
-	if( argc != 3) erro(" wrong argument number \n " );
-	
-	char* vidName = argv[1];
 
-	if (!existeArq(vidName)) erro("There is nothing with that name in that folder or whatever \n");
-	  VideoCapture vi(vidName);
-	if (!vi.isOpened()) erro("Opening error \n ");
+	// Read user input
+	if(argc != 2)
+	{
+		erro("\n-- Erro -- \nNumero de argumentos invalido\nExemplo de entrada: reconhece-video video.avi\n");
+	}
 
-	
+	// Read input video
+	string videoFile = argv[1];
+
+	if (!existeArq(videoFile)) erro("\n-- Erro -- \nNao existe video com o nome " + videoFile + " \n");
+		VideoCapture vi(videoFile);
+
+	float fps = vi.get(CV_CAP_PROP_FPS);
+	int nc = vi.get(CV_CAP_PROP_FRAME_WIDTH);
+	int nl = vi.get(CV_CAP_PROP_FRAME_HEIGHT);
+	int frames = vi.get(CV_CAP_PROP_FRAME_COUNT);
+
+	// Create output video
+	videoFile.erase(videoFile.end()-4, videoFile.end());
+	videoFile += "-detection.avi";
+	VideoWriter vo(videoFile, CV_FOURCC('X','V','I','D'), fps, Size(nc,nl));
+
 	//Create matrix
-	Mat_<COR> img(vi.get(CV_CAP_PROP_FRAME_HEIGHT ), vi.get(CV_CAP_PROP_FRAME_WIDTH ));
+	Mat_<COR> src;
 	Mat_<FLT> quadrado; 
 	le( quadrado, "template-new.png" );
-	
-	//Creating the output file
-	int ex = static_cast<int>(vi.get(CV_CAP_PROP_FOURCC));
-	Size size(vi.get(CV_CAP_PROP_FRAME_WIDTH), vi.get(CV_CAP_PROP_FRAME_HEIGHT)); 
-	VideoWriter writer(argv[2], ex, vi.get(CV_CAP_PROP_FPS), size, true);	
 
-	//Picking frame
-	while (vi.grab()) {
+	//Frame analysis
+	for (int i = 1; i <= frames; i++) 
+	{
 		
-		vi.retrieve(img);
+		vi >> src;
+		
+		printSQR(src, quadrado); 
 
-		printSQR(img,quadrado); 
-		
-		writer.write(img);
-		
-		printf("\r Processing %u s ", (int)vi.get(CV_CAP_PROP_POS_MSEC)/1000);
-		
-		}
+		//Show results
+		vo << src;
+		namedWindow("Template Matching Video", 0);
+		imshow("Template Matching Video", src);
+		if(waitKey(30) >= 0) break;
+	}
+
+	cout << "\n\t" + videoFile + " gerado com sucesso\n";
+	destroyAllWindows();
 }
