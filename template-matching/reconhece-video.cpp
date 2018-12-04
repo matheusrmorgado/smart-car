@@ -1,6 +1,5 @@
 #include <cekeikon.h>
 
-
 void printSQR( Mat_<COR>& img, Mat_<FLT> quadrado){				
 	
 	Mat_<FLT> imgFLT(img.size());
@@ -40,16 +39,16 @@ int main( int argc, char** argv )
 {
 
 	// Read user input
-	if(argc != 2)
-	{
+	if (argc != 2) 
 		erro("\n-- Erro -- \nNumero de argumentos invalido\nExemplo de entrada: reconhece-video video.avi\n");
-	}
 
 	// Read input video
 	string videoFile = argv[1];
 
-	if (!existeArq(videoFile)) erro("\n-- Erro -- \nNao existe video com o nome " + videoFile + " \n");
-		VideoCapture vi(videoFile);
+	if (!existeArq(videoFile)) 
+		erro("\n-- Erro -- \nNao existe video com o nome " + videoFile + " \n");
+	
+	VideoCapture vi(videoFile);
 
 	float fps = vi.get(CV_CAP_PROP_FPS);
 	int nc = vi.get(CV_CAP_PROP_FRAME_WIDTH);
@@ -72,13 +71,19 @@ int main( int argc, char** argv )
 		
 		vi >> src;
 		
+		if (i == 450) 
+			imp( src, "quad450-detection.png" ); 
+
 		printSQR(src, quadrado); 
 
 		//Show results
-		vo << src;
 		namedWindow("Template Matching Video", 0);
 		imshow("Template Matching Video", src);
-		if(waitKey(30) >= 0) break;
+		if (waitKey(30) >= 0) 
+			break;
+
+		//Save image in video
+		vo << src;
 	}
 
 	cout << "\n\t" + videoFile + " gerado com sucesso\n";
