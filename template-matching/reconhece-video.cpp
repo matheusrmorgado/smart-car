@@ -92,12 +92,9 @@ int main( int argc, char** argv )
 	{
 		
 		vi >> src;
-		
-		if (i == 450) imp( src, "quad450.png" ); 
-
+		//if (i == 450) imp( src, "quad450.png" ); 
 		printSQR(src, quadrado); 
-
-		if (i == 450) imp( src, "quad450-detection.png" ); 
+		//if (i == 450) imp( src, "quad450-detection.png" ); 
 
 		//Show results
 		namedWindow("Template Matching Video", 0);
