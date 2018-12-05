@@ -121,7 +121,6 @@ int main( int argc, char** argv )
 	//Larn how to count
 	MNIST mnist(28, true, false);
 	mnist.le("./mnist");
-	flann::Index ind = train(mnist);
 	
 	printf("Training");
 	CvSVM ind;

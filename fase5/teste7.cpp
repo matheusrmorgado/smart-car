@@ -119,7 +119,6 @@ int main( int argc, char** argv )
 	//Larn how to count
 	MNIST mnist(14, true, true);
 	mnist.le("./mnist");
-	flann::Index ind = train(mnist);
 	CvKNearest ind(mnist.ax,mnist.ay,Mat(),false,1);
 	
 	//Crete matrix
