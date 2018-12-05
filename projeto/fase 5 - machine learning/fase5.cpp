@@ -105,7 +105,8 @@ int main( int argc, char** argv )
 
 	// Create output video
 	videoFile.erase(videoFile.end()-4, videoFile.end());
-	videoFile += "-detection.avi";
+	string videoName = videoFile;
+	videoFile += "-fase5.avi";
 	VideoWriter vo(videoFile, CV_FOURCC('X','V','I','D'), fps, Size(nc,nl));
 
 	// Create matrix
@@ -116,22 +117,23 @@ int main( int argc, char** argv )
 	// Machine Learning
 	MNIST mnist(28, true, true);
 	mnist.le("./mnist");
-	CvKNearest ind(mnist.ax, mnist.ay,Mat(), false, 1);
+	CvKNearest ind(mnist.ax, mnist.ay, Mat(), false, 1);
 
 	int number = -1;
-	printf("\nAguarde... O seu video esta sendo processado\n");
+	printf("\nAguarde... O video esta sendo processado\n");
 
 	// Frame analysis
 	for (int i = 1; i <= frames; i++) 
 	{		
 		//Save frame in image
 		vi >> src;
+		if (i == 100) imp( src, videoName + "-quad100.png" ); 
 		
 		cv::Rect rect;
 		rect = printSQR(src, quadrado);
-		
 		number = printNumber(ind, mnist, src, rect);
 
+		if (i == 100) imp( src, videoName + "-quad100-fase5.png" ); 
 		//Show results
 		namedWindow("Template Matching - Machine Learning Video", 0);
 		imshow("Template Matching - Machine Learning Video", src);
