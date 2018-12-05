@@ -5,7 +5,8 @@
 using namespace cv;
 
 int estado;
-void onMouse(int event, int c, int l, int flags, void* userdata) {
+void onMouse(int event, int c, int l, int flags, void* userdata)
+{
     if (event==EVENT_LBUTTONDOWN) {
         if      (   0<=l && l<300 &&   0<=c && c<300 ) estado=1;
         else if (   0<=l && l<300 && 300<=c && c<600 ) estado=2;
@@ -24,7 +25,8 @@ void onMouse(int event, int c, int l, int flags, void* userdata) {
     }
 }
 
-class tecladoVirtual {
+class tecladoVirtual
+{
     Point p,q;
     int thickness, lineType, shift;
     double tipLength;
@@ -80,7 +82,8 @@ void setControles(Mat_<Vec3b>& imagem)
 }
 
 
-void printSQR( Mat_<COR>& img, Mat_<FLT> quadrado){             
+void printSQR( Mat_<COR>& img, Mat_<FLT> quadrado)
+{             
     
     Mat_<FLT> imgFLT(img.size());
     Mat_<FLT> result;
@@ -95,7 +98,7 @@ void printSQR( Mat_<COR>& img, Mat_<FLT> quadrado){
 
     int tamanho; float aux = 0.0;
     
-    for (int s = 15; s < 70; s=s+5){
+    for (int s = 15; s < 60; s=s+5){
         resize( quadrado, quadrado, Size(s,s), 0, 0, INTER_AREA );
         quadrado = somaAbsDois( dcReject( quadrado ) );
         matchTemplate( imgFLT, quadrado, result, CV_TM_CCORR );
@@ -150,8 +153,12 @@ void printSQR( Mat_<COR>& img, Mat_<FLT> quadrado){
     }
 }
 
-int main(int argc, char *argv[]) {
-    if (argc!=2) erro("client6 servidorIpAddr\n");
+int main(int argc, char *argv[])
+{
+    // Read user input
+    if (argc != 2) 
+        erro("\n-- Erro -- \nNumero de argumentos invalido\nExemplo de entrada: client6 servidorIpAddr\n");
+
     CLIENT client(argv[1]);
     vector<BYTE> vb;
     Mat_<COR> camera_display(900, 900);
@@ -164,7 +171,8 @@ int main(int argc, char *argv[]) {
     le(quadrado, "template-new.png");
 
     int ch=-1;
-    while (ch<0) {
+    while (ch<0)
+    {
         // recebe img
         client.receiveImgComp(camera_display);
         flip(camera_display, camera_display, -1);
