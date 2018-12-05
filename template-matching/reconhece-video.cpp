@@ -15,7 +15,6 @@ void printSQR( Mat_<COR>& img, Mat_<FLT> quadrado){
 
 	int tamanho; float aux = 0.0;
 	
-	#pragma omp parallel for
 	for ( int s = 15; s < 60; s=s+5){
 		resize( quadrado, quadrado, Size(s,s), 0, 0, INTER_AREA );
 		quadrado = somaAbsDois( dcReject( quadrado ) );
