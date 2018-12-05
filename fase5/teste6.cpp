@@ -66,9 +66,9 @@ flann::Index train(MNIST& mnist){
 	return ind;
 }
 
-int printNumber(flann::Index& ind, MNIST& mnist, Mat_<COR>& img, Rect rec){
+int printNumber(CvSVM& ind, MNIST& mnist, Mat_<COR>& img, Rect rec){
 	
-	if (rec.width < 20)
+	if (rec.width < 15)
 		return(-1);
 	
 	Mat_<GRY> insideSQR(rec.width,rec.height);
@@ -78,29 +78,31 @@ int printNumber(flann::Index& ind, MNIST& mnist, Mat_<COR>& img, Rect rec){
 			insideSQR(i,j) = img(i+rec.x,j+rec.y)[0]/3
 							+ img(i+rec.x,j+rec.y)[1]/3 
 							+ img(i+rec.x,j+rec.y)[2]/3;
-			if (insideSQR(i,j) > 160)
-				insideSQR(i,j) = 255;
+			//if (insideSQR(i,j) > 140)
+			//	insideSQR(i,j) = 255;
+			//else
+			//	insideSQR(i,j) = insideSQR(i,j)/1.5;
 		}
 	}
 	//mostra (insideSQR);
 	
-	Mat_<GRY> resizedInsideSQR(14,14);
-	cv::resize(insideSQR, resizedInsideSQR, cv::Size(14,14));
+	Mat_<GRY> resizedInsideSQR(28,28);
+	cv::resize(insideSQR, resizedInsideSQR, cv::Size(28,28));
 	//mostra (resizedInsideSQR);
 	
-	Mat_<FLT> matToFind(1,14*14); 
-	for(int i=0; i<14*14; i++){
+	Mat_<FLT> matToFind(1,28*28); 
+	for(int i=0; i<28*28; i++){
 		matToFind(i) = (float)(resizedInsideSQR(i))/255.0;
 	}
-		
-	vector<int> indices(1);
-	vector<float> dists(1);
-	ind.knnSearch(matToFind,indices,dists,1);
 	
-	cv::putText(img, std::to_string((int)(mnist.ay(indices[0]))), 
-	Point(rec.x, rec.y +10),FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, Scalar::all(255),1,8);
+	Mat_<FLT> result(1,1);
+	
+	result =ind.predict(matToFind);
+	
+	cv::putText(img, std::to_string((int)result(0,0))
+	,Point(rec.x, rec.y +10),FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, Scalar::all(255),1,8);
 		
-	return mnist.ay(indices[0]);
+	return result(0,0);
 	
 }
 	
@@ -117,9 +119,14 @@ int main( int argc, char** argv )
 	if (!vi.isOpened()) erro("Opening error \n ");
 
 	//Larn how to count
-	MNIST mnist(14, true, true);
+	MNIST mnist(28, true, false);
 	mnist.le("./mnist");
 	flann::Index ind = train(mnist);
+	
+	printf("Training");
+	CvSVM ind;
+	ind.train(mnist.ax,mnist.ay);
+	printf("End");
 	
 	//Crete matrix
 	Mat_<COR> img(vi.get(CV_CAP_PROP_FRAME_HEIGHT ),vi.get(CV_CAP_PROP_FRAME_WIDTH ));
@@ -146,8 +153,12 @@ int main( int argc, char** argv )
 		rect = printSQR(img,quadrado);
 
 		number = printNumber(ind,mnist,img,rect);
+
+		printf("%d\n\n",number);
 		
 		writer.write(img);
+		
+		printf("\r Processing %u s ", (int)vi.get(CV_CAP_PROP_POS_MSEC)/1000);
 		
 		}
 }
