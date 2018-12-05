@@ -1,0 +1,3 @@
+Juntar fase5 com fase4.
+
+Pode se basear em arquivos da pasta exemplos\controle-tecla.
