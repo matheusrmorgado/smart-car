@@ -1,5 +1,4 @@
 //projeto.hpp - incluir no projeto
-//eliminei MAXDATASIZE
 #include <cekeikon.h>
 
 #include <unistd.h>
@@ -358,4 +357,3 @@ bool testaVb(const vector<BYTE> vb, BYTE b) {
     if (vb[i]!=b) { igual=false; break; }
   return igual;
 }
-
