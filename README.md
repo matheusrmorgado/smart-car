@@ -24,7 +24,7 @@ Na primeira etapa do projeto foi vital implementar a comunicação TCP/IP de for
 Além disso, a dupla desenvolveu nessa fase a interface para controle de posição do carrinho pelo computador. Para isso, criamos uma classe chamada tecladoVirtual, sendo que para cada seta, criada pela função arrowedLine do OpenCV, existe um estado. Dessa forma, quando o usuário clica em uma seta, a variável estado é alterada e enviada para o Raspberry que interpreta e imprime na tela o número referente ao estado.
 
 <p align="center">
-  <img src=https://github.com/matheusrmorgado/smart-car/blob/master/exemplos/interface/interface.PNG height="300" width="300">
+  <img src=https://github.com/matheusrmorgado/smart-car/blob/master/examples/interface/interface.PNG height="300" width="300">
 </p>
 <p align="center">
   <i> Figura 2 - Interface para controle do carrinho </i>
